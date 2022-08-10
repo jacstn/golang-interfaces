@@ -1,2 +1,2 @@
-## playground with different aspects of go
+## Playground with different aspects of Go Lang
 - interfaces
