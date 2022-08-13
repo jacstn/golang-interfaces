@@ -15,7 +15,7 @@ func About(w http.ResponseWriter, r *http.Request) {
 }
 
 func renderTemplate(w http.ResponseWriter, templateName string) {
-	parsedTemplate, _ := template.ParseFiles("./templates/" + templateName + ".tmpl")
+	parsedTemplate, _ := template.ParseFiles("./templates/"+templateName+".tmpl", "./templates/base.layout.tmpl")
 
 	err := parsedTemplate.Execute(w, nil)
 	if err != nil {
