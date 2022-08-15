@@ -10,6 +10,7 @@ func routes() *chi.Mux {
 	mux := chi.NewRouter()
 
 	mux.Use(middleware.Recoverer)
+	mux.Use(WriteToConsole)
 
 	mux.Get("/", handlers.Home)
 	mux.Get("/about", handlers.About)
