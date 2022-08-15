@@ -2,17 +2,24 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
-
-	"github.com/jacstn/golang-playground/simple-server/pkg/handlers"
 )
 
 const portNumber = ":3000"
 
 func main() {
-	http.HandleFunc("/", handlers.Home)
-	http.HandleFunc("/about", handlers.About)
-
 	fmt.Println(fmt.Sprintf("Starting application %s", portNumber))
-	http.ListenAndServe(portNumber, nil)
+
+	srv := &http.Server{
+		Addr:    portNumber,
+		Handler: routes(),
+	}
+
+	err := srv.ListenAndServe()
+
+	if err != nil {
+		log.Fatal("Cannot start server")
+	}
+
 }
