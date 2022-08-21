@@ -15,12 +15,7 @@ type Url struct {
 }
 
 func main() {
-	db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/urldb")
-	defer db.Close()
-
-	if err != nil {
-		log.Fatal(err)
-	}
+	db := Connect()
 
 	res, err := db.Query("SELECT * FROM domain")
 
@@ -39,6 +34,16 @@ func main() {
 			log.Fatal(err)
 		}
 
-		fmt.Printf("%v\n", url.Name, url.Id, url.CreatedAt)
+		fmt.Printf("%v\n", url)
 	}
+	defer db.Close()
+}
+
+func Connect() *sql.DB {
+	db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/urldb")
+	if err != nil {
+		panic("Error connecting to db")
+	}
+
+	return db
 }
