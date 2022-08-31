@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math"
 	"os"
 )
 
@@ -34,10 +35,41 @@ func main() {
 		log.Println("error marshalling json")
 	}
 	print(string(marshalled))
-	parseJsonFile()
+	arr := parseJsonFile()
+
+	fmt.Println(indexOf("A", arr))
+	en := IntToCode(23423423423, arr)
+	fmt.Println("encode int", en)
+	fmt.Println("dec", CodeToInt(en, arr))
 }
 
-func parseJsonFile() {
+func IntToCode(num int, charArr []string) string {
+	arrLen := len(charArr)
+	fmt.Println("arrlen", arrLen)
+	var strOut string
+
+	for num > arrLen-1 {
+		idx := (num % int(arrLen))
+		fmt.Println("current index", idx)
+		strOut = charArr[idx] + strOut
+		num = int(math.Floor(float64(num / arrLen)))
+	}
+
+	return charArr[num%arrLen] + strOut
+}
+
+func CodeToInt(code string, charArr []string) int {
+	retVal := 0
+
+	for i := 0; i < len(code); i++ {
+		x := float64(len(charArr))
+		y := float64(len(code) - i - 1)
+		retVal += int(math.Pow(x, y)) * indexOf(string(code[i]), charArr)
+	}
+	return retVal
+}
+
+func parseJsonFile() []string {
 	// Open our jsonFile
 
 	jsonFile, err := os.Open("charArr.json")
@@ -49,9 +81,11 @@ func parseJsonFile() {
 	var arr []string
 	_ = json.Unmarshal([]byte(byteValue), &arr)
 
-	fmt.Println(arr[5])
 	// defer the closing of our jsonFile so that we can parse it later on
 	defer jsonFile.Close()
+
+	return arr
+
 }
 
 func indexOf(ch string, charArr []string) int {
