@@ -10,24 +10,24 @@ import (
 
 var tokenAuth *jwtauth.JWTAuth
 
-func init() {
-	tokenAuth = jwtauth.New("HS256", []byte("secret"), nil)
-
-	// For debugging/example purposes, we generate and print
-	// a sample jwt token with claims `user_id:123` here:
-	_, tokenString, _ := tokenAuth.Encode(map[string]interface{}{"user_id": 123})
-	fmt.Printf("DEBUG: a sample jwt is %s\n\n", tokenString)
-}
-
 func main() {
-	addr := ":3333"
+	addr := ":3000"
 	fmt.Printf("Starting server on %v\n", addr)
 	http.ListenAndServe(addr, router())
 }
 
+func generateToken() string {
+	_, tokenString, _ := tokenAuth.Encode(map[string]interface{}{"user_id": 123})
+	fmt.Printf("DEBUG: a sample jwt is %s\n\n", tokenString)
+	return tokenString
+}
+
+func init() {
+	tokenAuth = jwtauth.New("HS256", []byte("secret-token"), nil)
+}
 func router() http.Handler {
 	r := chi.NewRouter()
-
+	generateToken()
 	// Protected routes
 	r.Group(func(r chi.Router) {
 		// Seek, verify and validate JWT tokens
