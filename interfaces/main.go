@@ -4,6 +4,7 @@ import "fmt"
 
 type bot interface {
 	getGreeting() string
+	getMessages() []string
 }
 
 type englishBot struct{}
@@ -15,6 +16,13 @@ func (englishBot) getGreeting() string {
 
 func (spanishBot) getGreeting() string {
 	return "hola!"
+}
+
+func (englishBot) getMessages() string {
+	return "mes"
+}
+func (spanishBot) getMessages() string {
+	return "mes"
 }
 
 func printGreeting(b bot) {
